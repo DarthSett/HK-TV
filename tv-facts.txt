@@ -1,0 +1,298 @@
+$ adb shell cmd package resolve-activity -a android.intent.action.MAIN -c android.intent.category.HOME
+priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+ActivityInfo:
+  name=com.ansub.tvhome.MainActivity
+  packageName=com.ansub.tvhome
+  enabled=true exported=true directBootAware=false
+  taskAffinity=com.ansub.tvhome targetActivity=null persistableMode=PERSIST_ROOT_ONLY
+  launchMode=2 flags=0x234 privateFlags=0x0 theme=0x0
+  screenOrientation=0 configChanges=0x7f7 softInputMode=0x0
+  lockTaskLaunchMode=LOCK_TASK_LAUNCH_MODE_DEFAULT
+  resizeMode=RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION
+  ApplicationInfo:
+    packageName=com.ansub.tvhome
+    labelRes=0x0 nonLocalizedLabel=Home icon=0x7f010001 banner=0x7f010000
+    processName=com.ansub.tvhome
+    taskAffinity=com.ansub.tvhome
+    uid=10014 flags=0x30883e44 privateFlags=0x8c001000 theme=0x103022f
+    requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+    sourceDir=/data/app/~~k9a2S89lTIAAifgNjOkfuQ==/com.ansub.tvhome-Ct5s0HU9usmJBV5g0mLTBQ==/base.apk
+    seinfo=default:targetSdkVersion=30
+    seinfoUser=:complete
+    dataDir=/data/user/0/com.ansub.tvhome
+    deviceProtectedDataDir=/data/user_de/0/com.ansub.tvhome
+    credentialProtectedDataDir=/data/user/0/com.ansub.tvhome
+    enabled=true minSdkVersion=21 targetSdkVersion=34 versionCode=20 targetSandboxVersion=1
+    supportsRtl=false
+    fullBackupContent=true
+    crossProfile=false
+    HiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    allowsPlaybackCapture=true
+
+$ adb shell pm list packages | grep -iE "hotstar|twitch|tvlauncher|tvsettings|livetv|tv\.input"
+package:in.startv.hotstar
+package:com.google.android.tvlauncher
+package:tv.twitch.android.app
+package:com.heytap.tv.livetv
+
+$ adb shell dumpsys tv_input
+User Ids (Current user: 0):
+  0
+UserState (0):
+  inputMap: inputId -> TvInputState
+    com.mediatek.tvinput/.tuner.TunerInputService/HW1: info: TvInputInfo{id=com.mediatek.tvinput/.tuner.TunerInputService/HW1, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.tuner.TunerInputService}; state: 0
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HW7: info: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW7, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}; state: 0
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HW6: info: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW6, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}; state: 1
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HW5: info: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW5, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}; state: 1
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HDMI300004: info: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HDMI300004, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}; state: 0
+    com.mediatek.tvinput/.composite.CompositeInputService/HW2: info: TvInputInfo{id=com.mediatek.tvinput/.composite.CompositeInputService/HW2, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.composite.CompositeInputService}; state: 1
+    com.mediatek.tvinput/.tuner.TunerInputService/HW0: info: TvInputInfo{id=com.mediatek.tvinput/.tuner.TunerInputService/HW0, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.tuner.TunerInputService}; state: 0
+  packageSet:
+    com.mediatek.tvinput
+    com.mediatek.tv.agent
+  clientStateMap: ITvInputClient -> ClientState
+    android.os.BinderProxy@f474430: com.android.server.tv.TvInputManagerService$ClientState@844aaf2
+      sessionTokens:
+        android.os.Binder@6c1ea56
+      clientTokens: android.os.BinderProxy@f474430
+      userId: 0
+  serviceStateMap: ComponentName -> ServiceState
+    ComponentInfo{com.mediatek.tvinput/com.mediatek.tvinput.tuner.TunerInputService}: com.android.server.tv.TvInputManagerService$ServiceState@a7eb543
+      sessionTokens:
+      service: android.media.tv.ITvInputService$Stub$Proxy@7ffc7c0
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@544bcf9
+      bound: true
+      reconnecting: false
+    ComponentInfo{com.mediatek.tvinput/com.mediatek.tvinput.hdmi.HDMIInputService}: com.android.server.tv.TvInputManagerService$ServiceState@16e843e
+      sessionTokens:
+        android.os.Binder@6c1ea56
+      service: android.media.tv.ITvInputService$Stub$Proxy@e4d629f
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@f99fec
+      bound: true
+      reconnecting: false
+    ComponentInfo{com.mediatek.tvinput/com.mediatek.tvinput.component.ComponentInputService}: com.android.server.tv.TvInputManagerService$ServiceState@58b2fb5
+      sessionTokens:
+      service: android.media.tv.ITvInputService$Stub$Proxy@fcaa64a
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@f2f89bb
+      bound: true
+      reconnecting: false
+    ComponentInfo{com.mediatek.tv.agent/com.mediatek.tv.agent.TVRemoteServiceAgent}: com.android.server.tv.TvInputManagerService$ServiceState@4d6ced8
+      sessionTokens:
+      service: android.media.tv.ITvInputService$Stub$Proxy@58c1231
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@d14dd16
+      bound: true
+      reconnecting: false
+    ComponentInfo{com.mediatek.tvinput/com.mediatek.tvinput.composite.CompositeInputService}: com.android.server.tv.TvInputManagerService$ServiceState@2430697
+      sessionTokens:
+      service: android.media.tv.ITvInputService$Stub$Proxy@2560084
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@cdea06d
+      bound: true
+      reconnecting: false
+    ComponentInfo{com.mediatek.tvinput/com.mediatek.tvinput.scart.SCARTInputService}: com.android.server.tv.TvInputManagerService$ServiceState@f9b4a2
+      sessionTokens:
+      service: android.media.tv.ITvInputService$Stub$Proxy@6a77533
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@374a0f0
+      bound: true
+      reconnecting: false
+    ComponentInfo{com.mediatek.tvinput/com.mediatek.tvinput.vga.VGAInputService}: com.android.server.tv.TvInputManagerService$ServiceState@b51d669
+      sessionTokens:
+      service: android.media.tv.ITvInputService$Stub$Proxy@f6278ee
+      callback: com.android.server.tv.TvInputManagerService$ServiceCallback@3da318f
+      bound: true
+      reconnecting: false
+  sessionStateMap: ITvInputSession -> SessionState
+    android.os.Binder@6c1ea56: com.android.server.tv.TvInputManagerService$SessionState@29adc1c
+      inputId: com.mediatek.tvinput/.hdmi.HDMIInputService/HW7
+      sessionId: 1000237630
+      client: android.media.tv.ITvInputClient$Stub$Proxy@4a87025
+      seq: 0
+      callingUid: 1000
+      callingPid: 23763
+      userId: 0
+      sessionToken: android.os.Binder@6c1ea56
+      session: android.media.tv.ITvInputSession$Stub$Proxy@f8135fa
+      logUri: null
+      hardwareSessionToken: null
+  mCallbacks:
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@1d257ab
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@6879e08
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@c14e9a1
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@79cb7c6
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@6dcc387
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@fc92b4
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@b757edd
+    android.media.tv.TvInputManager$2@5ae347c
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@99c8a52
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@7381123
+    android.media.tv.ITvInputManagerCallback$Stub$Proxy@c2a2620
+  mainSessionToken: android.os.Binder@6c1ea56
+TvInputHardwareManager Info:
+  mConnections: deviceId -> Connection
+    0: Connection{ mHardwareInfo: TvInputHardwareInfo {id=0, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    1: Connection{ mHardwareInfo: TvInputHardwareInfo {id=1, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    2: Connection{ mHardwareInfo: TvInputHardwareInfo {id=2, type=3, audio_type=-2147450880, audio_addr=, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    5: Connection{ mHardwareInfo: TvInputHardwareInfo {id=5, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=1, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    6: Connection{ mHardwareInfo: TvInputHardwareInfo {id=6, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=2, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    7: Connection{ mHardwareInfo: TvInputHardwareInfo {id=7, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=3, cable_connection_status=0}, mInfo: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW7, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}, mCallback: android.media.tv.ITvInputHardwareCallback$Stub$Proxy@2502bd9, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: 1000, mResolvedUserId: 0, mResourceClientProfile: ResourceClientProfile {tvInputSessionId=null, useCase=400} }
+    9: Connection{ mHardwareInfo: TvInputHardwareInfo {id=9, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    10: Connection{ mHardwareInfo: TvInputHardwareInfo {id=10, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    11: Connection{ mHardwareInfo: TvInputHardwareInfo {id=11, type=3, audio_type=-2147450880, audio_addr=, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    14: Connection{ mHardwareInfo: TvInputHardwareInfo {id=14, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=1, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    15: Connection{ mHardwareInfo: TvInputHardwareInfo {id=15, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=2, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+    16: Connection{ mHardwareInfo: TvInputHardwareInfo {id=16, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=3, cable_connection_status=0}, mInfo: null, mCallback: null, mConfigs: [TvStreamConfig {mStreamId=0;mType=1;mGeneration=0}, TvStreamConfig {mStreamId=1;mType=1;mGeneration=0}], mCallingUid: null, mResolvedUserId: null, mResourceClientProfile: null }
+  mHardwareList:
+    TvInputHardwareInfo {id=0, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}
+    TvInputHardwareInfo {id=1, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}
+    TvInputHardwareInfo {id=2, type=3, audio_type=-2147450880, audio_addr=, cable_connection_status=0}
+    TvInputHardwareInfo {id=5, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=1, cable_connection_status=0}
+    TvInputHardwareInfo {id=6, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=2, cable_connection_status=0}
+    TvInputHardwareInfo {id=7, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=3, cable_connection_status=0}
+    TvInputHardwareInfo {id=9, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}
+    TvInputHardwareInfo {id=10, type=2, audio_type=-2147467264, audio_addr=, cable_connection_status=0}
+    TvInputHardwareInfo {id=11, type=3, audio_type=-2147450880, audio_addr=, cable_connection_status=0}
+    TvInputHardwareInfo {id=14, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=1, cable_connection_status=0}
+    TvInputHardwareInfo {id=15, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=2, cable_connection_status=0}
+    TvInputHardwareInfo {id=16, type=9, audio_type=-2147483616, audio_addr=, hdmi_port=3, cable_connection_status=0}
+  mHdmiDeviceList:
+    CEC: logical_address: 0x04 device_type: 4 vendor_id: 524358 display_name: PlayStation 5 power_status: 1 physical_address: 0x3000 port_id: 3
+  mHardwareInputIdMap: deviceId -> inputId
+    0: com.mediatek.tvinput/.tuner.TunerInputService/HW0
+    1: com.mediatek.tvinput/.tuner.TunerInputService/HW1
+    2: com.mediatek.tvinput/.composite.CompositeInputService/HW2
+    5: com.mediatek.tvinput/.hdmi.HDMIInputService/HW5
+    6: com.mediatek.tvinput/.hdmi.HDMIInputService/HW6
+    7: com.mediatek.tvinput/.hdmi.HDMIInputService/HW7
+  mHdmiInputIdMap: id -> inputId
+    4: com.mediatek.tvinput/.hdmi.HDMIInputService/HDMI300004
+  mInputMap: inputId -> inputInfo
+    com.mediatek.tvinput/.tuner.TunerInputService/HW0: TvInputInfo{id=com.mediatek.tvinput/.tuner.TunerInputService/HW0, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.tuner.TunerInputService}
+    com.mediatek.tvinput/.tuner.TunerInputService/HW1: TvInputInfo{id=com.mediatek.tvinput/.tuner.TunerInputService/HW1, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.tuner.TunerInputService}
+    com.mediatek.tvinput/.composite.CompositeInputService/HW2: TvInputInfo{id=com.mediatek.tvinput/.composite.CompositeInputService/HW2, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.composite.CompositeInputService}
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HW5: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW5, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HW6: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW6, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HW7: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HW7, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}
+    com.mediatek.tvinput/.hdmi.HDMIInputService/HDMI300004: TvInputInfo{id=com.mediatek.tvinput/.hdmi.HDMIInputService/HDMI300004, pkg=com.mediatek.tvinput, service=com.mediatek.tvinput.hdmi.HDMIInputService}
+
+$ adb shell cmd package query-activities -a android.intent.action.VIEW -d content://android.media.tv/passthrough/x
+No activities found
+
+$ adb shell getprop ro.product.model
+C00
+
+$ adb shell wm size
+Physical size: 1920x1080
+
+================ EXTRA: which app opens HDMI inputs (read-only, 2026-11-01) ================
+$ adb shell cmd package query-activities --brief -a android.intent.action.VIEW -d "content://android.media.tv/passthrough/com.mediatek.tvinput%2F.hdmi.HDMIInputService%2FHW7"
+No activities found
+
+$ adb shell cmd package query-activities --brief -a android.intent.action.VIEW -t vnd.android.cursor.item/channel
+1 activities found:
+  Activity #0:
+    priority=0 preferredOrder=0 match=0x608000 specificIndex=-1 isDefault=true
+    com.heytap.tv.livetv/.ActivityEntrance
+
+$ adb shell cmd package query-activities --brief -a android.intent.action.VIEW -d content://android.media.tv/channel/1
+No activities found
+
+$ adb shell cmd package query-activities --brief -a android.media.tv.action.SETUP_INPUTS
+No activities found
+
+$ adb shell ps -A -o PID,NAME | grep 23763   (process that owns the active HDMI 3 session)
+ 23763 com.heytap.tv.livetv
+
+$ adb shell dumpsys package com.heytap.tv.livetv  (activities + intent filters, trimmed)
+Activity Resolver Table:
+  Full MIME Types:
+      vnd.android.cursor.item/program:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+      vnd.android.cursor.dir/program:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+      vnd.android.cursor.item/channel:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+      vnd.android.cursor.dir/channel:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+
+  Base MIME Types:
+      vnd.android.cursor.dir:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+      vnd.android.cursor.item:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 6bdaa5a
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          StaticType: "vnd.android.cursor.item/channel"
+          StaticType: "vnd.android.cursor.dir/channel"
+          StaticType: "vnd.android.cursor.item/program"
+          StaticType: "vnd.android.cursor.dir/program"
+
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter d15617c
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+          Category: "android.intent.category.LEANBACK_LAUNCHER"
+      com.heytap.tv.livetv.action.PLAY_SOURCE:
+        fff06f com.heytap.tv.livetv/.ActivityEntrance filter 7b67a05
+          Action: "com.heytap.tv.livetv.action.PLAY_SOURCE"
+          Category: "android.intent.category.DEFAULT"
+
+  MIME Typed Actions:
+      android.intent.action.VIEW:
+
+$ adb shell dumpsys package com.heytap.tv.livetv | grep -E "enabled=|versionName"
+    versionName=1.0.01.001
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+
+$ adb shell content gettype --uri "content://android.media.tv/passthrough/com.mediatek.tvinput%2F.hdmi.HDMIInputService%2FHW7"
+Result: vnd.android.cursor.item/channel
+
+$ adb shell cmd package query-activities --brief -a android.intent.action.VIEW -d "content://android.media.tv/passthrough/com.mediatek.tvinput%2F.hdmi.HDMIInputService%2FHW7" -t vnd.android.cursor.item/channel
+1 activities found:
+  Activity #0:
+    priority=0 preferredOrder=0 match=0x608000 specificIndex=-1 isDefault=true
+    com.heytap.tv.livetv/.ActivityEntrance

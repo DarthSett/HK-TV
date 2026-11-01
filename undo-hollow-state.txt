@@ -1,0 +1,63 @@
+# undo-hollow-state.txt: TV state BEFORE the hollow-home project changed anything
+# taken 2026-11-01 19:32:44 +0530 from 192.168.88.5:5555 (all commands read-only)
+TV_SERIAL=P6230196C6PT01451
+TV_MODEL=C00
+TV_SDK=30
+TV_BUILD=OnePlus/OnePlusTV/Cebu:11/RTM8.240401.135/2408080101:user/release-keys
+
+## HOME (what the Home button opens)
+HOME_ACTIVITY=com.ansub.tvhome/.MainActivity
+HOME_ROLE_HOLDERS=com.ansub.tvhome   (from dumpsys role; 'cmd role get-role-holders' does not exist on Android 11)
+### all HOME candidates:
+    com.ansub.tvhome/.MainActivity
+    com.android.tv.settings/.system.FallbackHome
+
+## dev.skippy.channel
+SKIPPY_INSTALLED=no
+### /sdcard/Android/data/dev.skippy.channel/ listing:
+ls: /sdcard/Android/data/dev.skippy.channel/: No such file or directory
+
+## deviceidle whitelist
+system-excidle,com.google.android.apps.mediashell,10053
+system-excidle,com.android.providers.calendar,10028
+system-excidle,com.android.providers.downloads,10022
+system-excidle,com.android.vending,10060
+system-excidle,com.google.android.gms,10058
+system-excidle,com.android.proxyhandler,10023
+system-excidle,com.android.shell,2000
+system-excidle,com.netflix.ninja,10046
+system-excidle,com.android.providers.contacts,10024
+system,com.google.android.apps.mediashell,10053
+system,com.android.providers.downloads,10022
+system,com.google.android.gms,10058
+system,com.android.shell,2000
+system,com.netflix.ninja,10046
+SKIPPY_WHITELISTED=no
+
+## Settings this project will change: none planned (any change gets its old value recorded here first)
+
+## Reference only (TV Detox state; the hollow-home undo never touches these)
+### disabled packages:
+com.android.printspooler
+com.coloros.relax.tv
+com.google.android.apps.mediashell
+com.google.android.feedback
+com.google.android.katniss
+com.google.android.marvin.talkback
+com.google.android.play.games
+com.google.android.tv.assistant
+com.google.android.tvlauncher
+com.google.android.tvrecommendations
+com.google.android.videos
+com.heytap.ars.sink
+com.heytap.mcs
+com.heytap.optvmiracastservice
+com.heytap.tv.assistant.oneplus
+com.heytap.tv.btspeaker
+com.heytap.tv.camera
+com.heytap.tv.filebrowser
+com.heytap.tv.remotediagnosing
+com.oneplus.tv.userguide
+net.oneplus.weather
+oneplus.smarthome
+### /data/local/tmp/tvhome-disabled.txt present: yes

@@ -1,0 +1,25 @@
+/* órbita do Plex: cápsula de vidro com pôster redondo, anel de progresso e slides */
+#orb { position: absolute; left: 1060px; top: 650px; width: 764px; height: 132px; border-radius: 66px; overflow: hidden;
+       background: linear-gradient(100deg, rgba(10,26,48,.78), rgba(6,14,28,.55)); border: 1px solid rgba(214,232,238,.28);
+       box-shadow: inset 0 0 30px rgba(214,232,238,.08), 0 10px 30px rgba(0,0,0,.35); transition: opacity .4s; }
+#orb.empty { opacity: 0; }
+body.apps #orb, body.row0 #orb { opacity: .35; }
+#orb .circ { position: absolute; left: 11px; top: 11px; width: 110px; height: 110px; }
+#orb .circ img { position: absolute; left: 9px; top: 9px; width: 92px; height: 92px; border-radius: 50%; object-fit: cover; object-position: 50% 25%; }
+#orb .circ .big { position: absolute; left: 9px; top: 9px; width: 92px; height: 92px; border-radius: 50%; display: none;
+       background: radial-gradient(circle, rgba(214,232,238,.25), rgba(5,11,20,.9)); color: var(--ink); font-family: Cin; font-size: 34px;
+       line-height: 92px; text-align: center; text-shadow: 0 0 14px var(--cyan); }
+#orb.stat .circ img { display: none; } #orb.stat .circ .big { display: block; }
+#orb svg { position: absolute; inset: 0; width: 110px; height: 110px; }
+#orb .spin { transform-origin: 55px 55px; animation: girar 18s linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+#orb .txt { position: absolute; left: 140px; right: 40px; top: 20px; transition: opacity .5s, transform .5s; }
+#orb .txt.out { opacity: 0; transform: translateX(14px); }
+#orb .lab { font-family: Cin; font-size: 14px; letter-spacing: 3px; color: var(--cyan); }
+#orb .lab i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); margin-right: 9px; vertical-align: 2px; box-shadow: 0 0 8px var(--cyan); }
+#orb.live .lab i { background: #ff5060; box-shadow: 0 0 8px #ff5060; }
+#orb .tt { margin-top: 6px; font-family: Corm; font-weight: 700; font-size: 34px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#orb .st { margin-top: 1px; font-family: Corm; font-weight: 600; font-size: 22px; color: #a9c9e2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#orb .dots { position: absolute; right: 30px; top: 22px; }
+#orb .dots b { display: inline-block; width: 6px; height: 6px; border-radius: 3px; margin-left: 6px; background: rgba(255,255,255,.22); transition: all .4s; }
+#orb .dots b.on { width: 18px; background: var(--cyan); }

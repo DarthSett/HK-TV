@@ -1,0 +1,23 @@
+# gerado (gen.py, anim.py, build scripts)
+dist/
+# ambiente local
+venv/
+.venv/
+__pycache__/
+*.pyc
+# segredos: nunca no repo
+*.keystore
+*.jks
+*.pass
+.env
+cards/data/
+# Syncthing
+.stfolder
+.stversions/
+*.sync-conflict-*
+.syncthing.*.tmp
+*.idsig
+
+# local-only: copyrighted artwork and generated output
+local-assets/
+dist/

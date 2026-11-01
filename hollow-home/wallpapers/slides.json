@@ -1,0 +1,17 @@
+{
+  "_doc": "Wallpaper slideshow. Pictures live in local-assets/wallpapers (bundled into the APK) or are pushed to the TV folder; this file says how to show them. Per-picture keys override 'default'. effect: spores | fireflies | ash | embers | rain | dust | fog | none. Options per effect: count, speed, size, color (hex), opacity, angle (rain), beam [x1,y1,x2,y2,width] (dust). shade: 0-1 strength of the readability gradients. See docs/STANDALONE.md.",
+  "interval": 15,
+  "shuffle": true,
+  "fade": 2.5,
+  "zoom": true,
+  "effects": true,
+  "default": { "effect": "spores", "shade": 1 },
+  "slides": [
+    { "file": "memorial-rain.jpg",  "effect": "rain",      "count": 130, "angle": 10, "color": "#bcd8ff", "shade": 0.9 },
+    { "file": "butterflies.jpg",    "effect": "spores",    "count": 50,  "color": "#d6f1ff", "shade": 0.85 },
+    { "file": "chamber.jpg",        "effect": "dust",      "count": 70,  "beam": [600, 0, 840, 880, 260], "shade": 0.8 },
+    { "file": "flowers.jpg",        "effect": "fireflies", "count": 16,  "color": "#e6ffd6", "shade": 1 },
+    { "file": "pixel.jpg",          "effect": "embers",    "count": 45,  "shade": 0.7 },
+    { "file": "green-clearing.jpg", "effect": "spores",    "count": 55,  "color": "#d9ffe8", "shade": 1 }
+  ]
+}

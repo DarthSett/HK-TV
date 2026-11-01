@@ -1,0 +1,15 @@
+{
+  "_doc": "Standalone home screen: wallpaper slideshow + particle effects + dock. The smart-home extras (cards, quips, Plex orbit, Bridge panel, Watch Next) are OFF. To bring one back: set its flag to true, fill in the matching block from house.skippy.json, deploy the cards server and rebuild. See docs/STANDALONE.md.",
+  "language": "en-GB",
+  "features": {
+    "cards": false,
+    "quips": false,
+    "plex": false,
+    "bridge": false,
+    "watchnext": false,
+    "warp": false
+  },
+  "wallpaper": {
+    "mode": "slideshow"
+  }
+}

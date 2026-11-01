@@ -1,0 +1,8 @@
+/* easter egg: hiperespaço (Konami) */
+#warp { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 99;   /* fixed+inset usa a largura falsa do WebView da Amazon */ display: none; background: radial-gradient(circle, rgba(214,232,238,.25), #000 70%); }
+#warp.on { display: block; }
+#warp canvas { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+#warp h1 { position: absolute; top: 470px; width: 100%; text-align: center; font-family: Cin; font-size: 64px; letter-spacing: 12px; color: #e6f8ff;
+           text-shadow: 0 0 30px var(--cyan), 0 0 80px var(--cyan); }
+#warp h2 { position: absolute; top: 560px; width: 100%; text-align: center; font-family: Corm; font-size: 32px; color: #9fd8f0; }
+

@@ -1,0 +1,8 @@
+/* transmissão do Skippy na home */
+#tx { position: absolute; left: 96px; top: 196px; width: 1300px; font-family: Corm; font-weight: 600; font-size: 28px; line-height: 1.2; color: #cfe8fb;
+      text-shadow: 0 2px 12px #000; white-space: normal; word-wrap: break-word; max-height: 68px; overflow: hidden; }
+#tx b { font-family: Cin; font-weight: 500; font-size: 15px; letter-spacing: 4px; color: var(--cyan); margin-right: 14px; vertical-align: 4px; }
+#tx.alerta { color: #ffd2d6; } #tx.alerta b { color: #ff5560; } #tx.rara { color: #ffe6b0; } #tx.rara b { color: #ffc850; }
+#tx::after { content: '▌'; color: var(--cyan); animation: pisca .8s steps(2) infinite; }
+@keyframes pisca { 50% { opacity: 0; } }
+body.apps #tx { opacity: 0; }

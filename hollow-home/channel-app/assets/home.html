@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920, initial-scale=1">
+<title>Home</title>
+<style>
+@font-face { font-family: Cin;  src: url(Cinzel.ttf); font-weight: 400 900; }
+@font-face { font-family: Corm; src: url(CormorantGaramond.ttf); font-weight: 300 700; }
+:root { --accent: #dce9ed; --accent-d: rgba(200,225,232,.30); --cyan: var(--accent); --cyan-d: var(--accent-d); --ink: #eef4f5; --mute: #93a8af; --void: #05080a; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: none; text-size-adjust: none; }   /* Amazon's WebView boosts text in wide blocks on its own */
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--void); color: var(--ink); font-family: Corm, serif; }
+html.video, html.video body { background: transparent; }
+html.video #bg { display: none; }
+
+/* wallpaper slideshow: two stacked layers that cross-fade; shade keeps clock and dock readable on any picture */
+#bg, #shade, #dim, #fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+#bg { z-index: 0; }
+#bg .slide { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: center / cover no-repeat; opacity: 0;
+             transition: opacity 2.5s ease; will-change: opacity, transform; }
+#bg .slide.on { opacity: 1; }
+#bg .slide.zoom { animation: drift 110s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: scale(1) translate3d(0, 0, 0); } to { transform: scale(1.06) translate3d(-16px, -9px, 0); } }
+#shade { z-index: 1; transition: opacity 2.5s ease;
+  background:
+    radial-gradient(ellipse 760px 400px at 100% 0, rgba(3,6,8,.62), rgba(3,6,8,0)),
+    linear-gradient(to bottom, rgba(3,6,8,.55) 0, rgba(3,6,8,0) 300px),
+    linear-gradient(to top, rgba(3,6,8,.80) 0, rgba(3,6,8,.38) 250px, rgba(3,6,8,0) 540px),
+    radial-gradient(ellipse at 50% 46%, rgba(0,0,0,0) 58%, rgba(0,0,0,.42) 100%); }
+#dim { z-index: 2; background: rgba(3,6,8,.62); opacity: 0; transition: opacity .45s ease; }
+body.apps #dim { opacity: 1; }
+#fx { z-index: 3; }
+
+#stage { position: absolute; z-index: 4; left: 0; top: 0; width: 1920px; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+body.apps #stage { transform: translateY(-700px); }
+
+/* clock */
+#clock { position: absolute; right: 96px; top: 58px; text-align: right; text-shadow: 0 2px 14px rgba(0,0,0,.85); }
+#clock b { display: block; font-family: Cin; font-size: 62px; font-weight: 500; letter-spacing: 3px; color: var(--ink); }
+#clock span { font-family: Corm; font-size: 28px; font-weight: 600; color: #c4d3d8; letter-spacing: 4px; font-feature-settings: "lnum"; font-variant-numeric: lining-nums; }
+#net { display: none; margin-top: 6px; font-family: Cin; font-size: 14px; letter-spacing: 3px; color: var(--mute); }
+#net.ok::before { content: '\25CF  '; color: var(--accent); }
+#net.off::before { content: '\25CF  '; color: #d9822b; }
+body.f-net #net { display: block; }
+
+/* optional Skippy-era pieces: hidden unless their feature flag adds the body class (styles live in modules/*.css) */
+#cards, #cardinfo, #tx, #orb { display: none; }
+body.f-cards #cards, body.f-cards #cardinfo { display: block; }
+body.f-quips #tx { display: block; }
+body.f-plex #orb { display: block; }
+
+/* dock */
+#dock { position: absolute; left: 96px; right: 96px; top: 800px; height: 167px; border-radius: 10px;
+        background: rgba(6,10,12,.62); border: 1px solid rgba(214,232,238,.20); box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 0 0 4px rgba(6,10,12,.35); }
+#dock .row { position: absolute; left: 0; right: 0; top: 30px; display: flex; gap: 20px; justify-content: center; }
+.app { position: relative; width: 190px; height: 107px; flex: none; border-radius: 6px; overflow: hidden; transition: transform .35s ease, box-shadow .35s ease; opacity: .9; }
+.app img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.focus.app { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 2px rgba(238,246,248,.92), 0 0 30px rgba(190,222,232,.38); z-index: 2; }
+
+/* all apps */
+#allwrap { position: absolute; left: 96px; top: 1130px; width: 1728px; }
+#allwrap h2 { font-family: Cin; font-size: 22px; letter-spacing: 6px; color: var(--accent); font-weight: 500; margin-bottom: 28px; }
+#all { display: flex; flex-wrap: wrap; gap: 26px 22px; }
+.tile { position: relative; width: 240px; height: 135px; border-radius: 6px; overflow: hidden; transition: transform .35s ease, box-shadow .35s ease;
+        background: linear-gradient(160deg, rgba(14,22,26,.92), rgba(4,7,9,.94)); border: 1px solid rgba(214,232,238,.22); }
+.tile img.ban { width: 100%; height: 100%; object-fit: cover; }
+.tile img.ico { position: absolute; left: 50%; top: 18px; width: 64px; height: 64px; margin-left: -32px; }
+.tile span { position: absolute; left: 8px; right: 8px; bottom: 12px; text-align: center; font-family: Cin; font-size: 14px; letter-spacing: 1px;
+             color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.focus.tile { transform: scale(1.1); box-shadow: 0 0 0 2px rgba(238,246,248,.92), 0 0 30px rgba(190,222,232,.38); z-index: 2; }
+
+/* input picker */
+#inpick { position: absolute; inset: 0; z-index: 50; display: none; background: rgba(3,6,8,.82); }
+body.picking #inpick { display: block; }
+#inpick h2 { position: absolute; left: 0; right: 0; top: 250px; text-align: center; font-family: Cin; font-size: 26px; letter-spacing: 10px; color: var(--accent); font-weight: 500; }
+#inlist { position: absolute; left: 360px; right: 360px; top: 340px; display: flex; flex-direction: column; gap: 14px; }
+.inrow { display: flex; align-items: center; gap: 24px; height: 78px; padding: 0 34px; border-radius: 6px; font-family: Cin; font-size: 26px; letter-spacing: 3px; color: var(--accent);
+         background: linear-gradient(160deg, rgba(14,22,26,.92), rgba(4,7,9,.94)); border: 1px solid rgba(214,232,238,.22); transition: transform .3s ease, box-shadow .3s ease; }
+.inrow i { width: 12px; height: 12px; border-radius: 50%; background: rgba(214,232,238,.25); flex: none; }
+.inrow.on i { background: #dce9ed; box-shadow: 0 0 12px #dce9ed; }
+.inrow em { margin-left: auto; font-style: normal; font-size: 15px; letter-spacing: 4px; color: var(--mute); }
+.inrow.focus { transform: scale(1.03); box-shadow: 0 0 0 2px rgba(238,246,248,.92), 0 0 30px rgba(190,222,232,.38); }
+#inpick .none { text-align: center; font-family: Corm; font-size: 28px; color: var(--mute); }
+#hint { position: absolute; left: 0; right: 0; top: 1000px; text-align: center; font-family: Cin; font-size: 15px; letter-spacing: 6px; color: var(--mute); opacity: .8; text-shadow: 0 2px 10px #000; }
+body.apps #hint { opacity: 0; }
+
+/* easter-egg overlay frame (styles in modules/warp.css) */
+#warp { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 99; display: none; }
+</style>
+</head>
+<body>
+<div id="bg"><div class="slide"></div><div class="slide"></div></div>
+<div id="shade"></div>
+<div id="dim"></div>
+<canvas id="fx" width="1280" height="720" style="width:1920px;height:1080px"></canvas>
+<div id="stage">
+  <div id="clock"><b id="hh">--:--</b><span id="dd"></span><div id="net">CONNECTING&hellip;</div></div>
+  <div id="tx"><b>SKIPPY //</b><span id="txt"></span></div>
+  <div id="cards"><div class="track"></div></div>
+  <div id="cardinfo"><b></b><span></span></div>
+  <div id="orb" class="empty">
+    <div class="circ"><img id="orbImg"><div class="big" id="orbBig"></div>
+      <svg viewBox="0 0 110 110"><circle cx="55" cy="55" r="51" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="4"/>
+        <circle id="orbRing" cx="55" cy="55" r="51" fill="none" stroke="#dce9ed" stroke-width="4" stroke-linecap="round"
+          stroke-dasharray="0 320.4" transform="rotate(-90 55 55)" style="filter: drop-shadow(0 0 4px #dce9ed); transition: stroke-dasharray .8s"/>
+        <g class="spin"><circle cx="55" cy="55" r="54" fill="none" stroke="rgba(214,232,238,.45)" stroke-width="1.2" stroke-dasharray="3 9"/>
+          <circle cx="55" cy="1" r="2.6" fill="#dce9ed"/></g></svg></div>
+    <div class="txt" id="orbTxt"><div class="lab" id="orbLab"><i></i></div><div class="tt" id="orbTt"></div><div class="st" id="orbSt"></div></div>
+    <div class="dots" id="orbDots"></div>
+  </div>
+  <div id="dock"><div class="row"></div></div>
+  <div id="hint">&#9660;&nbsp; ALL APPS</div>
+  <div id="allwrap"><h2>ALL APPS</h2><div id="all"></div></div>
+</div>
+<div id="inpick"><h2>INPUTS</h2><div id="inlist"></div></div>
+<div id="warp"><canvas id="wc" width="1920" height="1080"></canvas><h1 id="wt">HYPERSPACE JUMP</h1><h2 id="ws"></h2></div>
+
+<script>
+// filled in by tools/render_home.py from house.json
+const FEATURES = __FEATURES__;
+const WALLPAPER = __WALLPAPER__;
+const SLIDES_BUNDLED = __SLIDES__;
+const LANG = '__LANG__';
+const SRV = '__SERVER__';
+const LA = window.Launcher || { apps: () => '[]', launch() {}, open() {}, has: () => false, slides: () => '', inputs: () => '[]', input() {} };   // stub for a plain browser
+if (WALLPAPER.mode === 'video') document.documentElement.classList.add('video');
+['cards', 'quips', 'plex', 'warp'].forEach(k => { if (FEATURES[k]) document.body.classList.add('f-' + k); });
+if (FEATURES.cards || FEATURES.quips || FEATURES.plex) document.body.classList.add('f-net');
+</script>
+
+<script>
+// ---------- dock candidates: the first installed entry of each row is used ----------
+// "go" is a package, package/activity, or '@name' for a built-in action. Package names marked TODO are guesses until confirmed on the TV.
+const DOCK_ALL = [
+  {b: 'netflix',    go: ['com.netflix.ninja']},
+  {b: 'primevideo', go: ['com.amazon.amazonvideo.livingroom']},
+  {b: 'hotstar',    go: ['in.startv.hotstar', 'in.startv.hotstar.dplus.tv']},        // confirmed on the TV: in.startv.hotstar
+  {b: 'youtube',    go: ['com.google.android.youtube.tv', 'com.amazon.firetv.youtube']},
+  {b: 'twitch',     go: ['tv.twitch.android.app', 'tv.twitch.android.viewer']},       // confirmed on the TV
+  {b: 'livetv',     go: ['com.heytap.tv.livetv/.ActivityEntrance']},                // this TV's Live TV (OnePlus/Heytap)
+  {b: 'inputs',     go: ['@inputs']},                                                // opens the HDMI/AV picker (needs no installed app)
+  {b: 'ponte',      go: ['@ponte']},
+  {b: 'settings',   go: ['com.android.tv.settings/.MainSettings', 'com.android.settings/.Settings', 'com.android.tv.settings']},
+];
+// apps outside the dock that still get a themed banner in the grid
+const THEMED = {'org.videolan.vlc': 'vlc', 'org.xbmc.kodi': 'kodi', 'com.plexapp.android': 'plex', 'com.google.android.youtube.tvmusic': 'youtubemusic', 'com.android.vending': 'playstore'};
+// hidden from the grid
+const HIDE = new Set(['com.spocky.projengmenu', 'dev.projectivy.blueprint.app', 'com.android.tv.settings', 'com.android.documentsui', 'com.android.providers.downloads.ui',
+  'com.amazon.tv.launcher', 'com.amazon.firebat', 'com.amazon.ssm', 'com.amazon.vizzini.ftvcds', 'com.amazon.minitv.android.app', 'com.amazon.imdb.tv.android.app',
+  'com.amazon.hedwig', 'com.amazon.tahoe', 'com.amazon.ftv.profilepicker']);
+let DOCK = [];
+
+// ---------- clock ----------
+const tick = () => { const d = new Date();
+  hh.textContent = d.toLocaleTimeString(LANG, {hour: '2-digit', minute: '2-digit', hour12: false});
+  dd.textContent = d.toLocaleDateString(LANG, {weekday: 'long', day: 'numeric', month: 'long'}).toUpperCase(); };
+tick(); setInterval(tick, 5000);
+
+// ---------- focus model: row 0 = cards (feature), 1 = dock, 2 = all apps ----------
+let row = 1, idx = [0, 0, 0], CARDS = [], ALL = [], loaded = false;
+const COLS = 7;
+
+function render() {
+  const t = document.querySelector('#cards .track');
+  t.innerHTML = CARDS.length ? '' : `<div class="empty">${loaded ? 'NO SIGNAL FROM THE CARDS SERVER' : 'LOADING…'}</div>`;
+  CARDS.forEach((c, i) => { const e = document.createElement('div'); e.className = 'card'; e.dataset.r = 0; e.dataset.i = i;
+    e.innerHTML = `<img src="${c.img}">`; t.appendChild(e); });
+  const d = document.querySelector('#dock .row'); d.innerHTML = '';
+  DOCK.forEach((a, i) => { const e = document.createElement('div'); e.className = 'app'; e.dataset.r = 1; e.dataset.i = i;
+    e.innerHTML = `<img src="banners/banner-${a.b}.png">`; d.appendChild(e); });
+  const g = document.getElementById('all'); g.innerHTML = '';
+  ALL.forEach((a, i) => { const e = document.createElement('div'); e.className = 'tile'; e.dataset.r = 2; e.dataset.i = i;
+    e.innerHTML = THEMED[a.pkg] ? `<img class="ban" src="banners/banner-${THEMED[a.pkg]}.png">` : a.banner ? `<img class="ban" src="${a.img}">` : `<img class="ico" src="${a.img}"><span>${a.label.toUpperCase()}</span>`;
+    g.appendChild(e); });
+  focus();
+}
+
+function count(r) { return r === 0 ? CARDS.length : r === 1 ? DOCK.length : ALL.length; }
+function focus() {
+  document.querySelectorAll('.focus').forEach(e => e.classList.remove('focus'));
+  if (row === 0 && !CARDS.length) row = 1;
+  idx[row] = Math.max(0, Math.min(count(row) - 1, idx[row]));
+  const el = document.querySelector(`[data-r="${row}"][data-i="${idx[row]}"]`);
+  if (el) el.classList.add('focus');
+  document.body.classList.toggle('apps', row === 2); document.body.classList.toggle('row0', row === 0);
+  const t = document.querySelector('#cards .track');
+  const off = Math.max(0, Math.min(idx[0] * 542 - 542, Math.max(0, CARDS.length * 542 - 1728)));
+  t.style.transform = `translateX(${-off}px)`;
+  const c = CARDS[idx[0]], ci = document.getElementById('cardinfo');
+  ci.style.opacity = row === 0 && c ? 1 : 0;
+  if (c) { ci.querySelector('b').textContent = c.title; ci.querySelector('span').textContent = c.desc || ''; }
+}
+
+// ---------- input picker ----------
+// Own names for the HDMI ports, by port number. Anything not listed keeps the name the TV gives it.
+const INPUT_NAMES = {1: 'Switch', 2: 'Misc', 3: 'PlayStation'};                 // by HDMI port number
+const INPUT_IDS = {HW5: 'Switch', HW6: 'Misc', HW7: 'PlayStation', HW2: 'Cable'};   // same, by input id on this TV (HW5/6/7 = HDMI 1/2/3, HW2 = composite/AV)
+let pick = false, INS = [], pi = 0;
+function openPicker() {
+  try { INS = JSON.parse(LA.inputs()); } catch (e) { INS = []; }
+  INS = INS.filter(x => !/\/HDMI\d+$/.test(x.id));   // the CEC child entry of a connected device (e.g. HDMI300004 = the PS5 again) is not a separate input
+  INS.sort((a, b) => a.label.localeCompare(b.label, LANG, {numeric: true}));   // sort by the TV's own names (HDMI 1, 2, 3...) before renaming
+  INS.forEach(x => { const m = /hdmi\s*(\d)/i.exec(x.label), k = x.id.split('/').pop(); if (INPUT_IDS[k]) x.label = INPUT_IDS[k]; else if (m && INPUT_NAMES[m[1]]) x.label = INPUT_NAMES[m[1]]; });
+  pick = true; pi = Math.max(0, INS.findIndex(x => x.state !== 2));
+  const L = document.getElementById('inlist');
+  L.innerHTML = INS.length ? INS.map((x, n) => `<div class="inrow${x.state !== 2 ? ' on' : ''}" data-p="${n}"><i></i>${x.label.toUpperCase()}<em>${x.state === 0 ? 'ACTIVE' : x.state === 1 ? 'STANDBY' : 'NO DEVICE'}</em></div>`).join('')
+                              : '<div class="none">No inputs found</div>';
+  document.body.classList.add('picking'); pfocus();
+}
+function closePicker() { pick = false; document.body.classList.remove('picking'); }
+function pfocus() {
+  document.querySelectorAll('.inrow.focus').forEach(e => e.classList.remove('focus'));
+  pi = Math.max(0, Math.min(INS.length - 1, pi));
+  const el = document.querySelector(`.inrow[data-p="${pi}"]`); if (el) el.classList.add('focus');
+}
+
+function activate() {
+  if (row === 0) { const c = CARDS[idx[0]]; if (c && c.intent) LA.open(c.intent); }
+  else if (row === 1) { const a = DOCK[idx[1]];
+    if (a.go === '@inputs') openPicker();
+    else if (a.go === '@ponte') LA.open('intent:#Intent;component=dev.skippy.channel/.Ponte;end'); else LA.launch(a.go); }
+  else { const a = ALL[idx[2]]; if (a) LA.launch(a.spec); }
+}
+
+document.addEventListener('keydown', ev => {
+  const k = ev.key;
+  if (pick) {
+    if (k === 'ArrowDown') pi++; else if (k === 'ArrowUp') pi--;
+    else if (k === 'Enter') { const x = INS[pi]; closePicker(); if (x) LA.input(x.id); ev.preventDefault(); return; }
+    else if (k === 'Escape' || k === 'Backspace') { closePicker(); ev.preventDefault(); return; }
+    pfocus(); ev.preventDefault(); return;
+  }
+  if (k === 'ArrowRight') idx[row]++;
+  else if (k === 'ArrowLeft') idx[row]--;
+  else if (k === 'ArrowDown') { if (row === 2) idx[2] += COLS; else row++; }
+  else if (k === 'ArrowUp') { if (row === 2 && idx[2] >= COLS) idx[2] -= COLS; else if (row > 0) row--; }
+  else if (k === 'Enter') { activate(); ev.preventDefault(); return; }
+  else return;
+  if (row === 2 && !ALL.length) row = 1;
+  focus(); ev.preventDefault();
+});
+window.onBack = () => { if (pick) { closePicker(); return true; } if (row !== 1) { row = 1; focus(); } return true; };
+window.onHomePressed = () => { closePicker(); row = 1; idx[1] = 0; focus(); };
+window.onHome = () => { if (window.loadFeed) loadFeed(); };
+
+// ---------- apps ----------
+try {
+  const raw = JSON.parse(LA.apps()), have = new Set(raw.map(a => a.pkg));
+  const ok = g => g === '@inputs' ? true : g === '@ponte' ? FEATURES.bridge : have.has(g.split('/')[0]) || (g.includes('/') && LA.has(g));
+  DOCK = DOCK_ALL.map(d => ({b: d.b, go: d.go.find(ok)})).filter(d => d.go).slice(0, 8);
+  const fav = new Set(DOCK.map(a => a.go.split('/')[0]));
+  ALL = raw.filter(a => !HIDE.has(a.pkg) && !fav.has(a.pkg))
+    .sort((a, b) => (b.tv - a.tv) || a.label.localeCompare(b.label, LANG));
+  if (LA.has('com.amazon.tv.launcher/.ui.HomeActivity_vNext'))   // Fire TV only: way back to Amazon's own home
+    ALL.push({pkg: 'amazon', spec: 'com.amazon.tv.launcher/.ui.HomeActivity_vNext', label: 'Amazon home', banner: false, img: 'banners/banner-apps.png'});
+} catch (e) { console.log('apps ' + e); }
+render();
+</script>
+
+<script>
+// ---------- particle effects: one canvas, one preset per picture ----------
+// Everything is drawn in 1920x1080 space onto a 1280x720 canvas that CSS scales up (cheaper on a weak GPU). Glow comes from a pre-drawn
+// sprite, never from shadowBlur, which is what makes weak WebViews stutter. ~30 fps cap. Plain ES2017 on purpose (old WebView).
+const FX = (() => {
+  const cv = document.getElementById('fx'), g = cv.getContext('2d');
+  const K = cv.width / 1920;
+  const R = (a, b) => a + Math.random() * (b - a);
+  const def = (v, d) => (v === undefined || v === null ? d : v);
+  const rgb = hex => { const n = parseInt(hex.replace('#', ''), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  const rgba = (hex, a) => { const c = rgb(hex); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; };
+  const sprites = {};
+  function sprite(hex) {
+    if (sprites[hex]) return sprites[hex];
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const x = c.getContext('2d'), gr = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, rgba(hex, 1)); gr.addColorStop(.18, rgba(hex, .85)); gr.addColorStop(.45, rgba(hex, .28)); gr.addColorStop(1, rgba(hex, 0));
+    x.fillStyle = gr; x.fillRect(0, 0, 64, 64);
+    return (sprites[hex] = c);
+  }
+  function fogTexture(hex, seed) {
+    const c = document.createElement('canvas'); c.width = 1024; c.height = 256;
+    const x = c.getContext('2d'); let s = seed;
+    const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 16; i++) {
+      const cx = rnd() * 1024, cy = 60 + rnd() * 140, r = 70 + rnd() * 110;
+      [-1024, 0, 1024].forEach(dx => {            // repeated left and right so the texture tiles seamlessly
+        const gr = x.createRadialGradient(cx + dx, cy, 0, cx + dx, cy, r);
+        gr.addColorStop(0, rgba(hex, .32)); gr.addColorStop(1, rgba(hex, 0));
+        x.fillStyle = gr; x.fillRect(cx + dx - r, cy - r, r * 2, r * 2);
+      });
+    }
+    return c;
+  }
+
+  // each preset returns {update(dt, t), draw(a, t)}; a = current fade * slide opacity
+  const PRESETS = {
+    none: () => ({ update() {}, draw() {} }),
+
+    // soft glowing motes drifting in every direction
+    spores(o) {
+      const n = def(o.count, 55), sp = sprite(def(o.color, '#d6ecf2')), v = def(o.speed, 1), sz = def(o.size, 1);
+      const P = Array.from({length: n}, () => ({x: R(0, 1920), y: R(0, 1080), s: R(9, 26) * sz, vx: R(-9, 9) * v, vy: R(-12, 5) * v, ph: R(0, 6.28), f: R(.3, .9)}));
+      return {
+        update(dt) { P.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < -40) p.x = 1960; if (p.x > 1960) p.x = -40; if (p.y < -40) p.y = 1120; if (p.y > 1120) p.y = -40; }); },
+        draw(a, t) { P.forEach(p => { g.globalAlpha = a * (.25 + .6 * (.5 + .5 * Math.sin(t * p.f + p.ph))); g.drawImage(sp, p.x - p.s / 2, p.y - p.s / 2, p.s, p.s); }); }
+      };
+    },
+
+    // a few bigger lights wandering on slow loops, pulsing
+    fireflies(o) {
+      const n = def(o.count, 14), sp = sprite(def(o.color, '#fff3b0')), sz = def(o.size, 1);
+      const P = Array.from({length: n}, () => ({cx: R(120, 1800), cy: R(180, 900), ax: R(40, 170), ay: R(30, 110), fx: R(.08, .3), fy: R(.08, .26), ph: R(0, 6.28), ph2: R(0, 6.28), fp: R(.5, 1.4), s: R(26, 50) * sz}));
+      return {
+        update() {},
+        draw(a, t) { P.forEach(p => { const k = Math.pow(.5 + .5 * Math.sin(t * p.fp + p.ph), 2);
+          g.globalAlpha = a * (.1 + .9 * k); const x = p.cx + p.ax * Math.sin(t * p.fx + p.ph), y = p.cy + p.ay * Math.sin(t * p.fy + p.ph2);
+          g.drawImage(sp, x - p.s / 2, y - p.s / 2, p.s, p.s); }); }
+      };
+    },
+
+    // pale flakes sinking slowly with a sway
+    ash(o) {
+      const n = def(o.count, 90), col = def(o.color, '#d9d5cc'), v = def(o.speed, 1), sz = def(o.size, 1);
+      const P = Array.from({length: n}, () => ({x: R(0, 1920), y: R(0, 1080), vy: R(14, 40) * v, sw: R(10, 32), f: R(.3, .9), ph: R(0, 6.28), s: R(1.6, 4.2) * sz, a: R(.25, .65)}));
+      return {
+        update(dt) { P.forEach(p => { p.y += p.vy * dt; if (p.y > 1090) { p.y = -10; p.x = R(0, 1920); } }); },
+        draw(a, t) { g.fillStyle = col; P.forEach(p => { g.globalAlpha = a * p.a; g.fillRect(p.x + Math.sin(t * p.f + p.ph) * p.sw, p.y, p.s, p.s * .7); }); }
+      };
+    },
+
+    // warm sparks rising from the lower part of the picture and fading out
+    embers(o) {
+      const n = def(o.count, 40), sp = sprite(def(o.color, '#ff9a45')), v = def(o.speed, 1), sz = def(o.size, 1);
+      const mk = (p, fresh) => { p.x = R(0, 1920); p.y = R(640, 1100); p.vx = R(-12, 12); p.vy = -R(25, 70) * v; p.max = R(3, 7); p.l = fresh ? R(0, p.max) : 0; p.s = R(6, 17) * sz; p.ph = R(0, 6.28); return p; };
+      const P = Array.from({length: n}, () => mk({}, true));
+      return {
+        update(dt) { P.forEach(p => { p.l += dt; p.x += p.vx * dt; p.y += p.vy * dt; if (p.l > p.max) mk(p, false); }); },
+        draw(a, t) { P.forEach(p => { g.globalAlpha = a * Math.sin(Math.PI * p.l / p.max) * (.65 + .35 * Math.sin(t * 17 + p.ph)); g.drawImage(sp, p.x - p.s / 2, p.y - p.s / 2, p.s, p.s); }); }
+      };
+    },
+
+    // thin slanted streaks, two depths drawn in two batches
+    rain(o) {
+      const n = def(o.count, 120), col = def(o.color, '#c3d9ff'), v = def(o.speed, 1), ang = def(o.angle, 8) * Math.PI / 180, sn = Math.sin(ang), cs = Math.cos(ang);
+      const mk = (p, fresh) => { p.len = R(16, 46); p.sp = R(900, 1500) * v; p.x = R(-300, 1920); p.y = fresh ? R(-50, 1080) : -p.len; return p; };
+      const P = Array.from({length: n}, () => mk({}, true));
+      return {
+        update(dt) { P.forEach(p => { p.x += sn * p.sp * dt; p.y += cs * p.sp * dt; if (p.y > 1090) mk(p, false); }); },
+        draw(a) { g.lineCap = 'round';
+          [[0, 30, .16, 1.2], [30, 99, .34, 1.9]].forEach(b => { g.globalAlpha = a; g.strokeStyle = rgba(col, b[2]); g.lineWidth = b[3]; g.beginPath();
+            P.forEach(p => { if (p.len >= b[0] && p.len < b[1]) { g.moveTo(p.x, p.y); g.lineTo(p.x - sn * p.len, p.y - cs * p.len); } }); g.stroke(); }); }
+      };
+    },
+
+    // tiny motes that glow only where a light shaft crosses them: beam = [x1, y1, x2, y2, width] in 1920x1080 space
+    dust(o) {
+      const n = def(o.count, 70), sp = sprite(def(o.color, '#fff1d6')), bm = o.beam, sz = def(o.size, 1), v = def(o.speed, 1);
+      const P = Array.from({length: n}, () => ({x: R(0, 1920), y: R(0, 1080), s: R(7, 18) * sz, vx: R(-6, 6) * v, vy: R(-7, 2) * v, ph: R(0, 6.28), f: R(.5, 1.6)}));
+      const lit = (x, y) => { if (!bm) return .7; const dx = bm[2] - bm[0], dy = bm[3] - bm[1], L = Math.sqrt(dx * dx + dy * dy);
+        const d = Math.abs(dy * (x - bm[0]) - dx * (y - bm[1])) / L, q = d / bm[4]; return .08 + .92 * Math.exp(-q * q); };
+      return {
+        update(dt) { P.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < -20) p.x = 1940; if (p.x > 1940) p.x = -20; if (p.y < -20) p.y = 1100; if (p.y > 1100) p.y = -20; }); },
+        draw(a, t) { P.forEach(p => { g.globalAlpha = a * lit(p.x, p.y) * (.55 + .45 * Math.sin(t * p.f + p.ph)); g.drawImage(sp, p.x - p.s / 2, p.y - p.s / 2, p.s, p.s); }); }
+      };
+    },
+
+    // two slow mist banks sliding in opposite directions
+    fog(o) {
+      const col = def(o.color, '#bcd0d8'), op = def(o.opacity, .6), v = def(o.speed, 1);
+      const L = [{tex: fogTexture(col, 11), y: 360, h: 560, sp: 9 * v, al: 1}, {tex: fogTexture(col, 97), y: 560, h: 440, sp: -6 * v, al: .75}];
+      return {
+        update() {},
+        draw(a, t) { L.forEach(l => { const w = 2300, off = (((t * l.sp) % w) + w) % w; g.globalAlpha = a * op * l.al;
+          g.drawImage(l.tex, -off, l.y, w, l.h); g.drawImage(l.tex, w - off, l.y, w, l.h); }); }
+      };
+    }
+  };
+
+  let systems = [], last = 0, T = 0, running = false;
+  function frame(ts) {
+    if (!systems.length) { running = false; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); return; }
+    requestAnimationFrame(frame);
+    if (ts - last < 30) return;
+    const dt = Math.min(.1, (ts - last) / 1000); last = ts; T += dt;
+    g.setTransform(K, 0, 0, K, 0, 0); g.globalAlpha = 1; g.clearRect(0, 0, 1920, 1080);
+    systems.forEach(s => {
+      const st = dt * s.rate;
+      s.alpha = s.target > s.alpha ? Math.min(1, s.alpha + st) : Math.max(0, s.alpha - st);
+      s.sys.update(dt, T); s.sys.draw(s.alpha * s.opacity, T);
+    });
+    systems = systems.filter(s => s.target > 0 || s.alpha > 0);
+  }
+  return {
+    names: Object.keys(PRESETS),
+    set(name, o, fade) {
+      o = o || {};
+      systems.forEach(s => { s.target = 0; });
+      const f = PRESETS[name];
+      if (f) systems.push({sys: f(o), alpha: 0, target: 1, rate: 1 / Math.max(.3, fade || 2.5), opacity: def(o.opacity, 1)});
+      if (systems.length && !running) { running = true; last = 0; requestAnimationFrame(frame); }
+    }
+  };
+})();
+
+// ---------- wallpaper slideshow ----------
+// Pictures and settings come from the TV folder (pushed with adb) when it has any, otherwise from the images bundled in the APK.
+// slides.json: {interval, shuffle, fade, zoom, effects, default:{...}, slides:[{file, effect, shade, interval, ...effect options}]}
+const SS = (() => {
+  const layers = Array.from(document.querySelectorAll('#bg .slide')), shade = document.getElementById('shade');
+  let cfg = null, base = 'wallpapers/', list = [], i = -1, cur = 0, timer = null, bad = 0;
+
+  function source() {
+    let raw = ''; try { raw = LA.slides(); } catch (e) {}
+    if (raw) { try { const o = JSON.parse(raw); base = o.base; return o.cfg; } catch (e) { console.log('slides ' + e); } }
+    return SLIDES_BUNDLED;
+  }
+  function norm(c) {
+    c = c || {}; const d = c.default || {};
+    return {interval: c.interval || 90, shuffle: c.shuffle !== false, fade: c.fade || 2.5, zoom: c.zoom !== false, effects: c.effects !== false,
+      slides: (c.slides || []).filter(s => s && s.file).map(s => Object.assign({}, d, s))};
+  }
+  function order(slides) {
+    const l = slides.slice();
+    if (cfg.shuffle) for (let k = l.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); const t = l[k]; l[k] = l[j]; l[j] = t; }
+    let last = ''; try { last = localStorage.getItem('lastSlide') || ''; } catch (e) {}
+    if (l.length > 1 && l[0].file === last) l.push(l.shift());   // never open on the picture shown last time
+    return l;
+  }
+  const load = url => new Promise(res => { const im = new Image(); im.onload = () => res(true); im.onerror = () => res(false); im.src = url; });
+
+  async function step() {
+    clearTimeout(timer);
+    if (!list.length || bad >= list.length) return;
+    i = (i + 1) % list.length; const s = list[i], url = base + encodeURIComponent(s.file);
+    if (!(await load(url))) { bad++; return step(); }
+    bad = 0;
+    const nl = layers[1 - cur], ol = layers[cur];
+    document.documentElement.style.setProperty('--fade', cfg.fade + 's');
+    nl.style.transitionDuration = ol.style.transitionDuration = shade.style.transitionDuration = cfg.fade + 's';
+    nl.style.backgroundImage = `url("${url}")`;
+    nl.classList.remove('zoom'); void nl.offsetWidth;                  // restart the slow drift for the new picture
+    if (cfg.zoom && s.zoom !== false) nl.classList.add('zoom');
+    nl.classList.add('on'); ol.classList.remove('on'); cur = 1 - cur;
+    shade.style.opacity = s.shade === undefined ? 1 : s.shade;
+    FX.set(cfg.effects ? (s.effect || 'none') : 'none', s, cfg.fade);
+    try { localStorage.setItem('lastSlide', s.file); } catch (e) {}
+    if (list.length > 1) timer = setTimeout(step, (s.interval || cfg.interval) * 1000);
+  }
+  function start() {
+    if (WALLPAPER.mode === 'video') { FX.set('spores', {}, 3); return; }   // video wallpaper: only a light overlay
+    cfg = norm(source()); list = order(cfg.slides);
+    if (list.length) step();
+  }
+  return { start, step, jump(k) { i = k - 1; return step(); }, get list() { return list; } };
+})();
+SS.start();
+window.HOME = { SS, FX };   // handy in a browser console / the headless preview
+
+// ---------- optional modules, loaded only when the flag in house.json is on ----------
+function loadModule(name, css) {
+  if (css) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'modules/' + name + '.css'; document.head.appendChild(l); }
+  const s = document.createElement('script'); s.src = 'modules/' + name + '.js'; document.body.appendChild(s);
+}
+if (FEATURES.cards) { loadModule('cards', true); }
+if (FEATURES.quips) { loadModule('quips', true); }
+if (FEATURES.warp) { loadModule('warp', true); }
+if (FEATURES.plex) { loadModule('plex', true); }
+</script>
+</body>
+</html>

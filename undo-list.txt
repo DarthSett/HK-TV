@@ -1,0 +1,67 @@
+UNDO LIST - OnePlus TV C00 (Android TV 11) at 192.168.88.2:5555
+Started 2026-10-29. Every app below was TURNED OFF (disabled), not deleted.
+
+To undo, turn USB/Network debugging back on on the TV, then in a terminal:
+  cd "E:\Users\Sourav Sett\Downloads\platform-tools-latest-windows\platform-tools"
+  adb connect 192.168.88.2:5555
+and run the "Undo" command on each line below.
+
+Quick option: tv-detox's undo.sh turns all of these back on too (every app below
+was also added to the TV's /data/local/tmp/tvhome-disabled.txt list that undo.sh reads),
+then removes the new home screen.
+
+== Apps turned off ==
+com.heytap.mcs   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.mcs
+com.heytap.tv.remotediagnosing   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.tv.remotediagnosing
+com.oneplus.tv.userguide   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.oneplus.tv.userguide
+net.oneplus.weather   | Undo: adb -s 192.168.88.2:5555 shell pm enable net.oneplus.weather
+oneplus.smarthome   | Undo: adb -s 192.168.88.2:5555 shell pm enable oneplus.smarthome
+com.heytap.tv.camera   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.tv.camera
+com.google.android.feedback   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.feedback
+com.google.android.play.games   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.play.games
+com.google.android.videos   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.videos
+com.google.android.tvrecommendations   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.tvrecommendations
+com.google.android.marvin.talkback   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.marvin.talkback
+com.android.printspooler   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.android.printspooler
+com.coloros.relax.tv   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.coloros.relax.tv
+com.heytap.optvmiracastservice   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.optvmiracastservice
+com.heytap.ars.sink   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.ars.sink
+com.heytap.tv.btspeaker   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.tv.btspeaker
+com.heytap.tv.filebrowser   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.tv.filebrowser
+com.google.android.apps.mediashell   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.apps.mediashell
+com.google.android.tv.assistant   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.tv.assistant
+com.google.android.katniss   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.katniss
+com.heytap.tv.assistant.oneplus   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.heytap.tv.assistant.oneplus
+com.google.android.tvlauncher   | Undo: adb -s 192.168.88.2:5555 shell pm enable com.google.android.tvlauncher   (turned off by tv-detox install.sh)
+
+== Installed ==
+com.ansub.tvhome (tv-detox home screen)   | Undo: adb -s 192.168.88.2:5555 uninstall com.ansub.tvhome   (turn tvlauncher back on FIRST)
+
+== Settings changed (old value -> new) ==
+window_animation_scale 1.0 -> 0   | Undo: adb -s 192.168.88.2:5555 shell settings put global window_animation_scale 1.0
+transition_animation_scale 1.0 -> 0   | Undo: adb -s 192.168.88.2:5555 shell settings put global transition_animation_scale 1.0
+animator_duration_scale (default/null) -> 0   | Undo: adb -s 192.168.88.2:5555 shell settings delete global animator_duration_scale
+sleep_timeout: NOT changed, left at 1800000 (30 min) as you asked
+screensaver: NOT changed (Ambient slideshow, starts after 5 min idle). TV is not OLED; you chose to keep it.
+
+== Restart check (2026-10-29) ==
+Waited 30 s after the last change, restarted once. Booted in ~1 minute, stayed up
+(no restart loop), no crashes logged, Home opens the new home screen, keyboard,
+HDMI inputs and Live TV still present, all changes kept.
+
+== Memory ==
+Before cleanup: Used RAM 1,466 MB of 1,812 MB  (apps 1,150 MB), free+cache ~713 MB
+After restart:  Used RAM 1,115 MB of 1,812 MB  (apps   825 MB), free+cache ~885 MB
+(After measured ~6 min after the restart; it creeps up a bit as you open apps.)
+
+== Undo EVERYTHING in one go ==
+A copy of tv-detox's undo.sh is saved next to this file (E:\ClaudeTV\undo.sh).
+1. On the TV, turn Developer options > Network/USB debugging back on.
+2. Open Git Bash and run:
+     export PATH="/e/Users/Sourav Sett/Downloads/platform-tools-latest-windows/platform-tools:$PATH"
+     sh /e/ClaudeTV/undo.sh 192.168.88.2:5555
+   It turns on every app in the list above (including tvlauncher), then removes the
+   new home screen. Then undo the 3 animation settings with the commands above if you want.
+3. Turn debugging off again afterwards.
+If the TV is stuck at the logo, it can only be reached over adb if debugging was left
+on; otherwise contact OnePlus support about a recovery/factory reset.
